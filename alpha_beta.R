@@ -5,6 +5,10 @@ library(viridis)
 source("/path/to/multiplot.R")
 #web source for multiplot script: http://peterhaschke.com/Code/multiplot.R
 
+#If you don't have metadata, skip the metadata-related sections.  
+#For plotting, remove the "_meta" suffix from the "ggplot(whatever_meta)" line.
+#Edit/remove metadata aesthetics (color, fill, shape, linetype, etc.) as needed.
+
 ###DATA###
 #Data should be a matrix-style dataframe.  Samples as rows, OTUs as columns.  Names should be row/column labels.
 #This works for a biom table converted from .biom to .txt using biom convert
@@ -34,7 +38,7 @@ rare_df_meta <- merge(rare_df,inmeta,by.x="Sample",by.y="X.SampleID",sort=FALSE)
 ###RAREFACTION PLOTS###
 #Rarefaction curves
 ggplot(rare_df_meta) +
-  geom_line(aes(as.numeric(Subsample),as.numeric(TaxObs),group=Sample,color=D.T,linetype=Material),size=1) +
+  geom_line(aes(as.numeric(Subsample),as.numeric(TaxObs),group=Sample,color=meta1,linetype=meta2),size=1) +
   scale_color_brewer(type="qualitative",palette = "Paired") +
   labs(x="Subsample Size",y="Contigs Observed") +
   theme_bw()
@@ -56,7 +60,7 @@ alpha_df_long_meta <- merge(alpha_df_long,inmeta,by.x="Sample",by.y="X.SampleID"
 
 ###ALPHA DIVERSITY PLOTS###
 ggplot(alpha_df_long_meta) +
-  geom_point(aes(Sample,value,color=D.T,shape=Material),size=3) + 
+  geom_point(aes(Sample,value,color=meta1,shape=meta2),size=3) + 
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
   facet_wrap(~variable,scales = "free") +
@@ -78,7 +82,7 @@ beta_bc_mds_df_meta <- merge(beta_bc_mds_df,inmeta,by.x="Sample",by.y="X.SampleI
 
 ###BETA DIVERSITY - PLOTTING###
 ggplot(beta_bc_mds_df_meta) +
-  geom_point(aes(MDS1,MDS2,color=D.T,shape=Material),size=3) +
+  geom_point(aes(MDS1,MDS2,color=meta1,shape=meta2),size=3) +
   theme_bw() + 
   annotate("text",label=paste("stress=",round(beta_bc_mds_stress,digits = 2),sep=""),x=Inf,y=Inf,hjust=1.1,vjust=1.5) +
   scale_color_brewer(type="qualitative",palette = "Paired") +
