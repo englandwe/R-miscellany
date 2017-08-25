@@ -36,11 +36,20 @@ for (i in seq_along(rc_data)) {
 rare_df_meta <- merge(rare_df,inmeta,by.x="Sample",by.y="X.SampleID",sort=FALSE)
 
 ###RAREFACTION PLOTS###
+
 #Rarefaction curves
 ggplot(rare_df_meta) +
   geom_line(aes(as.numeric(Subsample),as.numeric(TaxObs),group=Sample,color=meta1,linetype=meta2),size=1) +
   scale_color_brewer(type="qualitative",palette = "Paired") +
   labs(x="Subsample Size",y="Contigs Observed") +
+  theme_bw()
+
+#Grouped rarefaction curves (mean with SEM errorbars)
+ggplot(rare_df_meta) +
+  geom_line(aes(as.numeric(Subsample),as.numeric(TaxObs),group=meta1,color=meta1,linetype=meta2),size=1,stat="summary",fun.y=mean) +
+  geom_errorbar(aes(as.numeric(Subsample),as.numeric(TaxObs),group=meta1,color=meta1),fun.data = mean_se, stat="summary") +
+  scale_color_brewer(type="qualitative",palette = "Paired") +
+  labs(x="Subsample Size",y="OTUs Observed") +
   theme_bw()
 
 ###ALPHA DIVERSITY###
